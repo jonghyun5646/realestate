@@ -5,9 +5,9 @@
 
 {% block style %}
     <style>
-    .info {
-        font-weight: bold;
-    }
+        .info {
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 
@@ -30,9 +30,9 @@
 
 {% block script %}
     <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=603e7058472002afecb3e2648240b1ce"></script>
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=95d3f0dfa5561245c1f47d46bc2daa81&libraries=services,clusterer,drawing"></script>
     <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=603e7058472002afecb3e2648240b1ce&libraries=services,clusterer,drawing"></script>
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=95d3f0dfa5561245c1f47d46bc2daa81&libraries=clusterer"></script>
     <script>
         let mapContainer = document.getElementById('map');
         let mapOptions = {
@@ -57,13 +57,16 @@
                         "<div class='info'>층수 : {{ m.floor }}</div>" +
                         "<div class='info'>건축년도 : {{ m.year }}</div>" +
                         "<div>&nbsp;&nbsp;&nbsp;</div>",
-                    latlng: new kakao.maps.LatLng({{ m.latitude }}, {{ m.longitude }})
+                    latlng: new kakao.maps.LatLng({{ m.latitude }}, {{ m.longitude }}),
+                    "lat":{{ m.latitude }},
+                    "lng":{{ m.longitude }}
                 },
             {% endfor %}
         ]
 
         let imageSrc = '../static/img/icon/villa.png'
 
+        let markers = [];
         for (let i = 0; i < positions.length; i++) {
             let imageSize = new kakao.maps.Size(50, 50);
 
@@ -78,6 +81,10 @@
             let infowindow = new kakao.maps.InfoWindow({
                 content: positions[i].content
             });
+
+
+            // 생성된 마커를 마커 저장하는 변수에 넣음(마커 클러스터러 관련)
+            markers.push(marker);
 
             kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
             kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow))
@@ -94,5 +101,15 @@
                 infowindow.close();
             };
         }
+
+        // 마커 클러스터러를 생성합니다
+        let clusterer = new kakao.maps.MarkerClusterer({
+            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+            minLevel: 4 // 클러스터 할 최소 지도 레벨
+        });
+
+        // 클러스터러에 마커들을 추가합니다(마커 클러스터러 관련)
+        clusterer.addMarkers(markers);
     </script>
 {% endblock %}
