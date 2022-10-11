@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}아파트 - 내집찾아조{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+    <nav class="nav navbar-expand navbar-dark bg-dark py-2 fw-bold opacity-75">
+        <ul class="navbar-nav nav-fill w-100">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'apt' %}">아파트</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'office' %}">오피스텔</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'multi' %}">다세대, 연립</a></li>
+        </ul>
+    </nav>
+
+    <div id="main">
+        <div id="map" style="height: 550px"></div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=603e7058472002afecb3e2648240b1ce"></script>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=603e7058472002afecb3e2648240b1ce&libraries=services,clusterer,drawing"></script>
+    <script>
+        let mapContainer = document.getElementById('map');
+        let mapOptions = {
+            center: new kakao.maps.LatLng(37.4858838, 126.8973216),
+            level: 3
+        };
+
+        let map = new kakao.maps.Map(mapContainer, mapOptions);
+
+        let mapTypeControl = new kakao.maps.MapTypeControl();
+
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        let zoomControl = new kakao.maps.ZoomControl();
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        let positions = [
+            {
+                content: "<div>지번주소 : 구로구 구로동 182-13</div>" +
+                    "<div>면적 : </div>" +
+                    "<div>층수 : </div>" +
+                    "<div>건축년도 : </div>",
+                latlng: new kakao.maps.LatLng(37.4858838, 126.8973216)
+            }
+        ]
+
+        let imageSrc = '../static/img/icon/apt.png'
+
+        for (let i = 0; i < positions.length; i++) {
+            let imageSize = new kakao.maps.Size(50, 50);
+
+            let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            marker = new kakao.maps.Marker({
+                map: map,
+                position: positions[i].latlng,
+                image: markerImage
+            });
+
+            let infowindow = new kakao.maps.InfoWindow({
+                content: positions[i].content
+            });
+
+            kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+
+        function makeOverListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        function makeOutListener(infowindow) {
+            return function () {
+                infowindow.close();
+            };
+        }
+    </script>
+{% endblock %}

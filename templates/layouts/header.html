@@ -1,0 +1,17 @@
+<header class="d-flex justify-content-between">
+    <h1><a href="{% url 'index' %}"><img src="/static/img/findmyhome.png" width="120" height="120"></a></h1>
+    <h1><a href="{% url 'index' %}"><img src="/static/img/inquiry.png" width="120" height="120"></a></h1>
+</header>
+
+<nav class="nav navbar-expand navbar-dark bg-dark py-2 fw-bold">
+    <ul class="navbar-nav nav-fill w-100">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'apt' %}">매물 찾기</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'anal' %}">집값 분석</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'pred' %}">집값 예측</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'news' %}">부동산 뉴스</a></li>
+    </ul>
+</nav>
