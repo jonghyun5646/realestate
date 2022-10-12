@@ -1,5 +1,5 @@
-import cx_Oracle
-
+import json
+import requests
 from django.shortcuts import render
 from django.views import View
 
@@ -25,10 +25,29 @@ class OfficeView(View):
 
 class MultiView(View):
     def get(self, request):
-        multi = Multi.objects.select_related()
+        multi = Multi.objects.select_related().filter(addr__contains="nope")
+        crd = {"lat": 37.4858838, "lng": 126.8973216, "error": "fine"}
 
-        context = {'mul': multi}
+        context = {'mul': multi, "crd": crd}
         return render(request, 'sth/multi.html', context)
 
     def post(self, request):
-        pass
+        gu = request.POST['gu']
+        dong = request.POST['dong']
+        # searched = request.POST['searched']
+        addr = gu + " " + dong
+        multi = Multi.objects.select_related().filter(addr__contains=addr)
+
+        try:
+            url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + addr
+            headers = {"Authorization": "KakaoAK 06b665abccae1b7ca9b1ad97a115b5e7"}
+            api_json = json.loads(str(requests.get(url, headers=headers).text))
+            address = api_json['documents'][0]['address']
+            crd = {"lat": address['y'], "lng": address['x']}
+
+        except Exception as e:
+            crd = {"lat": 37.4858838, "lng": 126.8973216, "error": e}
+
+
+        context = {'mul': multi, "crd": crd}
+        return render(request, 'sth/multi.html', context)
