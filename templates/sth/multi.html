@@ -108,16 +108,24 @@
             if(map.getLevel() >= 3) map.setZoomable(false);
             if(e.deltaY < 0) map.setZoomable(true);
         });
-
+// style='width: 600px'
         let positions = [
             {% for m in mul %}
                 {
-                    addr:"<div class='info m-1'>지번 주소 : {{ m.addr }} {{ m.m_domain }}-{{ m.s_domain }}</div>"+
-                        {#`<div class='info m-1'>건축 년도 : ${parseInt({{ m.year }})}년</div>`+#}
-                        "<div class='info'>&nbsp;&nbsp;&nbsp;</div>",
+                    addr:"<div class='info m-1'>지번 주소: {{ m.sigungu }} {{ m.m_domain }}-{{ m.s_domain }}</div>"+
+                        "<div class='row",
                     content:
-                        "<div class='info m-1'>면적 : {{ m.area }}㎡, 층수 : {{ m.floor }}층</div>"+
-                        "<div class='info m-1'>&nbsp;&nbsp;&nbsp;</div>",
+                        "<div class='col'>"+
+                        "<div class='info'>&nbsp;&nbsp;&nbsp;</div>"+
+                        "<div class='info'>면적: {{ m.area }}㎡</div>"+
+                        "<div class='info'>층수: {{ m.floor }}층</div>"+
+                        "<div class='info'>전세가: {{ m.deposit }}만원</div>"+
+                        "<div class='info'>예측매매가: {{ m.predpr }}만원</div>"+
+                        "<div class='info'>깡통위험: {{ m.risk }}</div>"+
+                        "</div>",
+                    content_end:
+                        "</div>"
+                    ,
                     "lat":{{ m.latitude }},
                     "lng":{{ m.longitude }}
                 },
@@ -125,20 +133,39 @@
         ]
 
         let imageSrc = '../static/img/icon/house.png'
+        let imageSrc_danger = '../static/img/icon/house_danger.png'
+        let imageSrc_normal = '../static/img/icon/house_normal.png'
+        let imageSrc_safe = '../static/img/icon/house_safe.png'
 
         let markers = [];
+        let content_length = 1
         for (let i = 0; i < positions.length; i++) {
 
             if(i>0){
                 // 좌표가 중복되는 경우 content 합치기
                 if(positions[i-1].lat === positions[i].lat && positions[i-1].lng === positions[i].lng){
-                    positions[i].content = positions[i-1].content + positions[i].content
+                    positions[i].content = positions[i-1].content + positions[i].content;
+                    content_length ++;
+                }else {
+                    content_length = 1;
                 }
             }
 
+            let markerImage = new kakao.maps.MarkerImage(imageSrc_safe, imageSize);
+            /*
+            switch (positions[i].risk.toString.trim){
+                case "위험":
+                    markerImage = new kakao.maps.MarkerImage(imageSrc_danger, imageSize);
+                    break;
+                case "보통":
+                    markerImage = new kakao.maps.MarkerImage(imageSrc_normal, imageSize);
+                    break;
+                case "안전":
+                    markerImage = new kakao.maps.MarkerImage(imageSrc_safe, imageSize);
+                    break;
+            }
+            */
             let imageSize = new kakao.maps.Size(50, 50);
-
-            let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             let marker = new kakao.maps.Marker({
                 map: map,
@@ -146,8 +173,20 @@
                 image: markerImage
             });
 
+            let col_num = " row-cols-4'>";
+            switch(content_length){
+                    case 1:
+                        col_num = "'>";
+                        break;
+                    case 2:
+                        col_num = " row-cols-2'>";
+                        break;
+                    case 3:
+                        col_num = " row-cols-3'>";
+                        break;
+                }
             let infowindow = new kakao.maps.InfoWindow({
-                content: positions[i].addr + positions[i].content
+                content: positions[i].addr+col_num + positions[i].content + positions[i].content_end
             });
 
 
@@ -161,19 +200,6 @@
         function makeOverListener(map, marker, infowindow) {
             return function () {
                 infowindow.open(map, marker)
-
-                let infoTitle = document.querySelectorAll('.info-title');
-                infoTitle.forEach(function(e) {
-                    let w = e.offsetWidth + 10;
-                    let ml = w/2;
-                    e.parentElement.style.top = "82px";
-                    e.parentElement.style.left = "50%";
-                    e.parentElement.style.marginLeft = -ml+"px";
-                    e.parentElement.style.width = w+"px";
-                    e.parentElement.previousSibling.style.display = "none";
-                    e.parentElement.parentElement.style.border = "0px";
-                    e.parentElement.parentElement.style.background = "unset";
-                });
             };
         }
 

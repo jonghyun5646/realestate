@@ -9,7 +9,7 @@ from sth.models import Multi
 # Create your views here.
 class MultiView(View):
     def get(self, request):
-        multi = Multi.objects.select_related().filter(addr__contains="nope")
+        multi = Multi.objects.select_related().filter(sigungu__contains="nope")
         crd = {"lat": 37.4858838, "lng": 126.8973216, "error": "fine"}
 
         context = {'mul': multi, "crd": crd}
@@ -20,7 +20,7 @@ class MultiView(View):
         dong = request.POST['dong']
         searched = request.POST['searched']
         addr = gu + " " + dong
-        multi = Multi.objects.select_related().filter(addr__contains=addr)
+        multi = Multi.objects.select_related().filter(sigungu__contains=addr)
 
         try:
             crd = find_crd(addr + searched)
