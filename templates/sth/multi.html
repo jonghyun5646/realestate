@@ -79,9 +79,6 @@
 
 
 
-        console.log('{{ crd.lat }}')
-        console.log('{{ crd.lng }}')
-        console.log('{{ crd.error }}')
         // 주소-좌표 변환 객체를 생성합니다
         let coords = new kakao.maps.LatLng(parseFloat('{{ crd.lat }}'), parseFloat('{{ crd.lng }}'));
 
@@ -108,7 +105,7 @@
             if(map.getLevel() >= 3) map.setZoomable(false);
             if(e.deltaY < 0) map.setZoomable(true);
         });
-// style='width: 600px'
+
         let positions = [
             {% for m in mul %}
                 {
@@ -125,14 +122,13 @@
                         "</div>",
                     content_end:
                         "</div>"
-                    ,
+                    ,risk:"{{ m.risk }}",
                     "lat":{{ m.latitude }},
                     "lng":{{ m.longitude }}
                 },
             {% endfor %}
         ]
 
-        let imageSrc = '../static/img/icon/house.png'
         let imageSrc_danger = '../static/img/icon/house_danger.png'
         let imageSrc_normal = '../static/img/icon/house_normal.png'
         let imageSrc_safe = '../static/img/icon/house_safe.png'
@@ -151,9 +147,9 @@
                 }
             }
 
-            let markerImage = new kakao.maps.MarkerImage(imageSrc_safe, imageSize);
-            /*
-            switch (positions[i].risk.toString.trim){
+            let imageSize = new kakao.maps.Size(50, 50);
+
+            switch (positions[i].risk){
                 case "위험":
                     markerImage = new kakao.maps.MarkerImage(imageSrc_danger, imageSize);
                     break;
@@ -164,8 +160,7 @@
                     markerImage = new kakao.maps.MarkerImage(imageSrc_safe, imageSize);
                     break;
             }
-            */
-            let imageSize = new kakao.maps.Size(50, 50);
+
 
             let marker = new kakao.maps.Marker({
                 map: map,
