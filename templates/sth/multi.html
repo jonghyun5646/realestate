@@ -113,7 +113,7 @@
             {% for m in mul %}
                 {
                     addr:"<div class='info m-1'>지번 주소 : {{ m.addr }} {{ m.m_domain }}-{{ m.s_domain }}</div>"+
-                        `<div class='info m-1'>건축 년도 : ${parseInt({{ m.year }})}년</div>`+
+                        {#`<div class='info m-1'>건축 년도 : ${parseInt({{ m.year }})}년</div>`+#}
                         "<div class='info'>&nbsp;&nbsp;&nbsp;</div>",
                     content:
                         "<div class='info m-1'>면적 : {{ m.area }}㎡, 층수 : {{ m.floor }}층</div>"+
