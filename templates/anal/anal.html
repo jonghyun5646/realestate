@@ -2,3 +2,44 @@
 {% load static %}
 
 {% block title %}집값 분석 - 내집찾아조{% endblock %}
+
+{% block style %}
+    <style>
+        p {
+            font-weight: bold;
+            background: lightgray;
+        }
+
+        #main {
+
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <p class="my-3 text-center">월별 금리와 집값<br> x → 계약년월, y1 → 금리, y2 → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/월별%20금리와%20집값.png" style="width: 100%">
+
+        <p class="my-3 text-center">구별 연도별 집값<br> x → 계약년도, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/연도별%20구별%20집값.png" style="width: 100%">
+
+        <p class="my-3 text-center">가까운 역 갯수별 집값<br> x → 역 갯수, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/가까운%20역%20갯수별%20집값.jpg" style="width: 100%">
+
+        <p class="my-3 text-center">가까운 공원 갯수별 집값<br> x → 공원 갯수, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/가까운%20공원%20갯수별%20집값.jpg" style="width: 100%">
+
+        <p class="my-3 text-center">가까운 학교 갯수별 집값<br> x → 학교 갯수, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/가까운%20학교%20갯수별%20집값.jpg" style="width: 100%">
+
+        <p class="my-3 text-center">동별 집값 순위<br> x → 동, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/동별%20집값%20순위.png" style="width: 100%">
+
+        <p class="my-3 text-center">건물나이별 집값<br> x → 건물나이, y → 거래금액(만원)</p>
+        <img src="../../static/img/부동산%20시각화/건물나이별%20집값%20평균.png" style="width: 100%">
+
+    </div>
+{% endblock %}
+
+{% block script %}{% endblock %}

@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home.apps.HomeConfig',
     'sth.apps.SthConfig',
-    'news.apps.NewsConfig',
     'anal.apps.AnalConfig',
 ]
 
@@ -80,14 +79,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.oracle',
-    #     'NAME': 'orcl',
-    #     'USER': '20192198',
-    #     'PASSWORD': '990820',
-    #     'HOST': '168.126.146.45',
-    #     'PORT': '1521',
-    # }
 }
 
 # Password validation
