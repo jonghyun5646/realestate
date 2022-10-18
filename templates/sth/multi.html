@@ -118,7 +118,7 @@
                         "<div class='info'>층수: {{ m.floor }}층</div>"+
                         "<div class='info'>전세가: {{ m.deposit }}만원</div>"+
                         "<div class='info'>예측매매가: {{ m.predpr }}만원</div>"+
-                        "<div class='info'>깡통위험: {{ m.risk }}</div>"+
+                        "<div class='info'>깡통위험: <strong {% if m.risk == '위험' %}style='color: red' {% endif %}{% if m.risk == '주의' %}style='color: Gold' {% endif %}{% if m.risk == '안전' %}style='color: green' {% endif %}>{{ m.risk }}</strong></div>"+
                         "</div>",
                     content_end:
                         "</div>"
@@ -128,6 +128,7 @@
                 },
             {% endfor %}
         ]
+
 
         let imageSrc_danger = '../static/img/icon/house_danger.png'
         let imageSrc_normal = '../static/img/icon/house_normal.png'
